@@ -1,0 +1,41 @@
+version: '3.8'
+
+networks:
+  nwtis:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 20.24.5.0/24
+        
+services:
+  h2:
+    build:
+      context: .
+      dockerfile: Dockerfile.h2
+    networks:
+      nwtis:
+        ipv4_address: 20.24.5.4
+    ports:
+      - "9092:9092"
+
+  servisi:
+    build:
+      context: .
+      dockerfile: Dockerfile.servisi
+    networks:
+      - nwtis
+    ports:
+      - "8080:8080"
+    depends_on:
+      - h2
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    networks:
+      - nwtis
+    ports:
+      - "8081:8081"
+    depends_on:
+      - h2

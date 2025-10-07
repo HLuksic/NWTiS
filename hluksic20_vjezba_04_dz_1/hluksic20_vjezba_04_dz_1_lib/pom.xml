@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>edu.unizg.foi.nwtis.hluksic20</groupId>
+    <artifactId>hluksic20_vjezba_04_dz_1</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <version>1.1.0</version>
+  <artifactId>hluksic20_vjezba_04_dz_1_lib</artifactId>
+  <name>hluksic20_vjezba_04_dz_1_lib</name>
+  
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>com.google.code.gson</groupId>
+  		<artifactId>gson</artifactId>
+  		<version>2.10.1</version>
+  	</dependency>
+  	<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.junit.vintage</groupId>
+		    <artifactId>junit-vintage-engine</artifactId>
+		    <version>5.10.2</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-failsafe-plugin</artifactId>
+			<version>3.2.5</version>
+			<type>maven-plugin</type>
+		</dependency>
+  </dependencies>
+</project>

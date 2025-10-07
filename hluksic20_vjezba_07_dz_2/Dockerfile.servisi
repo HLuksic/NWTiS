@@ -1,0 +1,11 @@
+FROM amd64/eclipse-temurin:21
+
+RUN mkdir -p /app
+
+EXPOSE 8080
+
+WORKDIR /app
+
+COPY hluksic20_vjezba_07_dz_2_servisi /app
+
+CMD ["java", "-jar", "target/hluksic20_vjezba_07_dz_2_servisi-1.0.0-jar-with-dependencies.jar"]

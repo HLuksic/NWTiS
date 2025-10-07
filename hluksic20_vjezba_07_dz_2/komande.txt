@@ -1,0 +1,55 @@
+docker network create --subnet=20.24.5.0/24 nwtis_dz_2n
+
+docker network inspect nwtis_dz_2n
+
+docker volume create nwtis_hsql_dz_2v
+
+docker volume inspect nwtis_hsql_dz_2v
+
+sudo ls -al /var/lib/docker/volumes/nwtis_hsql_dz_2v/_data
+
+sudo cp -R /opt/hsqldb-2.7.2/hsqldb/data/* /var/lib/docker/volumes/nwtis_hsql_dz_2v/_data/
+
+docker build -t nwtis_hsql_dz_2i -f Dockerfile.hsql .
+
+docker run -it -d --network=nwtis_dz_2n --ip 20.24.5.3 \
+-p 9001:9001 \
+--name=nwtis_hsql_dz_2c --hostname=nwtis_hsql_dz_2c \
+--mount source=nwtis_hsql_dz_2v,target=/opt/data \
+nwtis_hsql_dz_2i:latest
+
+docker ps
+
+docker volume create nwtis_h2_dz_2v
+
+docker volume inspect nwtis_h2_dz_2v
+
+sudo ls -al /var/lib/docker/volumes/nwtis_h2_dz_2v/_data
+
+sudo cp -R /opt/database/* /var/lib/docker/volumes/nwtis_h2_dz_2v/_data/
+
+docker build -t nwtis_h2_dz_2i -f Dockerfile.h2 .
+
+docker run -it -d --network=nwtis_dz_2n --ip 20.24.5.4 \
+-p 9092:9092 \
+--name=nwtis_h2_dz_2c --hostname=nwtis_h2_dz_2c \
+--mount source=nwtis_h2_dz_2v,target=/opt/database \
+nwtis_h2_dz_2i:latest
+
+cd /opt/payara6-web/glassfish/bin; ./startserv
+
+mvn package; mvn cargo:redeploy -P ServerEE-local
+
+java -cp target/hluksic20_vjezba_07_dz_2_app-1.1.0.jar edu.unizg.foi.nwtis.hluksic20.vjezba_07_dz_2.posluzitelji.CentralniSustav NWTiS_DZ1_CS.txt &
+
+java -cp target/hluksic20_vjezba_07_dz_2_app-1.1.0.jar edu.unizg.foi.nwtis.hluksic20.vjezba_07_dz_2.posluzitelji.PosluziteljRadara NWTiS_DZ1_R1.txt &
+
+java -cp target/hluksic20_vjezba_07_dz_2_app-1.1.0.jar edu.unizg.foi.nwtis.hluksic20.vjezba_07_dz_2.klijenti.SimulatorVozila NWTiS_DZ1_SV.txt NWTiS_DZ1_V1.csv 1
+
+mvn package && java -jar target/hluksic20_vjezba_07_dz_2_servisi-1.0.0-jar-with-dependencies.jar
+
+curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" -d '{"id": "1", "broj": "1", "vrijeme": "1711348009", "brzina": "21.767", "snaga": "100.0", "struja": "112.1", "visina": "15.0", "gpsBrzina": "20.67", "tempVozila": "15", "postotakBaterija": "78", "naponBaterija": "220.0", "kapacitetBaterija": "1000", "tempBaterija": "67", "preostaloKm": "23.2", "ukupnoKm": "40.3", "gpsSirina": "44.4", "gpsDuzina":"22.2"}' "http://localhost:9080/nwtis/v1/api/simulacije"
+
+docker build -t rest -f Dockerfile.servisi .
+
+docker run -it -d --network=nwtis_dz_2n --ip 20.24.5.5 -p 9080:8080 --name=rest --hostname=rest rest
